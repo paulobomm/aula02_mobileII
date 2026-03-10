@@ -9,7 +9,6 @@ class TodoRepositoryImpl implements TodoRepository {
 
   @override
   Future<TodoFetchResult> fetchTodos({bool forceRefresh = false}) async {
-    // neste projeto didático, sempre busca remoto e salva lastSync local
     final models = await _remote.fetchTodos();
     final now = DateTime.now();
     await _local.saveLastSync(now);
