@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../widgets/todo_model.dart';
+import '../models/todo_model.dart';
 
 class TodoRemoteDataSource {
   final http.Client _client;
@@ -9,7 +9,11 @@ class TodoRemoteDataSource {
 
   Future<List<TodoModel>> fetchTodos() async {
     final uri = Uri.parse('https://jsonplaceholder.typicode.com/todos?_limit=20');
-    final res = await _client.get(uri);
+    final headers = {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'Accept': 'application/json, text/plain, */*',
+    };
+    final res = await _client.get(uri, headers: headers);
 
     if (res.statusCode < 200 || res.statusCode >= 300) {
       throw Exception('HTTP ${res.statusCode}');
@@ -24,7 +28,10 @@ class TodoRemoteDataSource {
     final uri = Uri.parse('https://jsonplaceholder.typicode.com/todos');
     final res = await _client.post(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      },
       body: jsonEncode({'title': title, 'completed': false}),
     );
 
@@ -40,7 +47,10 @@ class TodoRemoteDataSource {
     final uri = Uri.parse('https://jsonplaceholder.typicode.com/todos/$id');
     final res = await _client.patch(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      },
       body: jsonEncode({'completed': completed}),
     );
     if (res.statusCode < 200 || res.statusCode >= 300) {
